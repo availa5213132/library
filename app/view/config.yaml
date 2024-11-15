@@ -1,0 +1,5 @@
+smtp:
+  email: 1632590674@qq.com
+  host: smtp.qq.com
+  password: mfdwokdfhtnuigaf
+  port: 587

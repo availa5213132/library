@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>图书页面</title>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+<main>
+    <h1>图书列表</h1>
+    <div id="book_table"></div>
+    <div id ="book_info"></div>
+
+</main>
+<script>
+    $(document).ready(function (){
+        loadData()
+        $('body').on('click','.ajax_trigger',function (event){
+            event.preventDefault();
+            $("#book_info").empty();
+            // $.ajax({
+            //     // 请求资源路径
+            //     url:"",
+            //     // 请求参数
+            //     data:{
+            //         id:$(this).attr("data"),
+            //     },
+            //     // 请求方式
+            //     type:"get",
+            //     // 数据形式
+            //     dataType:"json",
+            //     // 请求成功后调用的回调函数
+            //     success:function (data) {
+            //         var book = data.data.Book
+            //         var h1 = $("<div></div>")
+            //         h1.append('<h2>图书详情</h2>')
+            //         h1.append('<h2>书名:' + book.name + '</h2>')
+            //         h1.append('<h2>id:' + book.uid + '</h2>')
+            //         // h1.append('<h2>brief_introduction:'+book.brief_introduction+'</h2>')
+            //         h1.append('<h2>status:' + book.status + '</h2>')
+            //         $("#book_info").append(h1)
+            //         var bookinfo = data.data.BookInfo
+            //         h1.append('<h2>内容简介:' + bookinfo.brief_introduction + '</h2>')
+            //         h1.append('<h2>章节:' + bookinfo.pages + '</h2>')
+            //         //前端传输数据给后端 例；投票完传数据给后端
+            //         // var form = $("<form method=\"post\"action=\"/book\"></form>")
+            //         // form.append('<input type="hidden" name="book_id" value="'+book.id+'">')
+            //         // $("#book_info").append(form)
+            //     },
+            //     error: function (data){
+            //         alert(data.message)
+            //     }
+            // });
+            function addBook(bookName, author){
+                $.ajax({
+                    url:"/addbook",
+                    data:{
+                        book_name: bookName,
+                        author: author
+                    },
+                    type:"post",
+                    dataType:"json",
+                    success:function (data) {
+                        alert("成功添加图书：" + bookName);
+                        // 刷新图书列表
+                        $("#book_table").empty();
+                        loadData();
+                    },
+                    error:function (){
+                        alert("添加图书失败！")
+                    }
+                });
+            }
+        });
+    });
+    function loadData(){
+        $.ajax({
+            // 请求资源路径
+            url:"/booklist",
+            // 请求参数
+            data:{
+            },
+            // 请求方式
+            type:"get",
+            // 数据形式
+            dataType:"json",
+            // 请求成功后调用的回调函数
+            success:function (data) {
+                console.log(data)
+                for (const datum of data.data){
+                    $("#book_table").append('<a href="#" class="ajax_trigger" data="'+datum.uid+'">'+datum.book_name+'</a></h2><br>');
+                    $("#book_table").append('<h2>作者:' + datum.author + '</h2>');
+                }
+            },
+            // 请求失败后调用的回调函数
+            error:function (){
+                alert("数据加载失败！")
+            }
+        });
+    }
+
+</script>
+</body>
+</html>
